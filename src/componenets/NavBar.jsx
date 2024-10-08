@@ -14,7 +14,7 @@ import { useState } from "react";
 const NavBar = () => {
   let [nav, setNav] = useState(false);
   return (
-    <div className="flex justify-between items-center mt-2">
+    <div className="flex justify-between items-center mt-2 w-full text-white p-5 z-50">
       <div className="flex items-center">
         <div onClick={() => setNav(true)}>
           <AiOutlineMenu size={25} className="cursor-pointer ml-2" />

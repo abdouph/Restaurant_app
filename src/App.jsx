@@ -5,8 +5,7 @@ import HeadLineCards from "./componenets/HeadLineCards";
 import Food from "./componenets/Food";
 function App() {
   return (
-    <div className="App ">
-      <NavBar />
+    <div className="App overflow-hidden">
       <Hero />
       <HeadLineCards />
       <Food />

@@ -25,34 +25,19 @@ export default function Food() {
         <div className="">
           <p className="font-bold text-gray-700">Filter Type</p>
           <div className="flex justify-between flex-wrap">
-            <button
-              onClick={() => setFoods(data)}
-              className="border-orange-600 text-orange-600 hover:border-white m-1 hover:text-white hover:bg-orange-600"
-            >
+            <button onClick={() => setFoods(data)} className="orgbtn">
               All
             </button>
-            <button
-              onClick={() => filterType("burger")}
-              className="border-orange-600 text-orange-600 hover:border-white m-1 hover:text-white hover:bg-orange-600"
-            >
+            <button onClick={() => filterType("burger")} className="orgbtn">
               Burgers
             </button>
-            <button
-              onClick={() => filterType("pizza")}
-              className="border-orange-600 text-orange-600 hover:border-white m-1 hover:text-white hover:bg-orange-600"
-            >
+            <button onClick={() => filterType("pizza")} className="orgbtn">
               Pizza
             </button>
-            <button
-              onClick={() => filterType("salad")}
-              className="border-orange-600 text-orange-600 hover:border-white m-1 hover:text-white hover:bg-orange-600"
-            >
+            <button onClick={() => filterType("salad")} className="orgbtn">
               Salads
             </button>
-            <button
-              onClick={() => filterType("chicken")}
-              className="border-orange-600 text-orange-600 hover:border-white m-1 hover:text-white hover:bg-orange-600"
-            >
+            <button onClick={() => filterType("chicken")} className="orgbtn">
               Chicken
             </button>
           </div>
@@ -60,28 +45,16 @@ export default function Food() {
         <div>
           <p className="font-bold text-gray-700">Filter Price</p>
           <div className="flex justify-between flex-wrap">
-            <button
-              onClick={() => filterPrice("$")}
-              className="border-orange-600 text-orange-600 hover:border-white m-1 hover:text-white hover:bg-orange-600"
-            >
+            <button onClick={() => filterPrice("$")} className="orgbtn">
               $
             </button>
-            <button
-              onClick={() => filterPrice("$$")}
-              className="border-orange-600 text-orange-600 hover:border-white m-1 hover:text-white hover:bg-orange-600"
-            >
+            <button onClick={() => filterPrice("$$")} className="orgbtn">
               $$
             </button>
-            <button
-              onClick={() => filterPrice("$$$")}
-              className="border-orange-600 text-orange-600 hover:border-white m-1 hover:text-white hover:bg-orange-600"
-            >
+            <button onClick={() => filterPrice("$$$")} className="orgbtn">
               $$$
             </button>
-            <button
-              onClick={() => filterPrice("$$$$")}
-              className="border-orange-600 text-orange-600 hover:border-white m-1 hover:text-white hover:bg-orange-600"
-            >
+            <button onClick={() => filterPrice("$$$$")} className="orgbtn">
               $$$$
             </button>
           </div>
