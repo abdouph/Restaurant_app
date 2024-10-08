@@ -2,6 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "Montserrat";
+  src: url("/fonts/Montserrat-Regular.ttf") format("truetype");
+}
+@font-face {
+  font-family: "MontserratLight";
+  src: url("/fonts/Montserrat-Light.ttf") format("truetype");
+}
+@font-face {
+  font-family: "MontserratMedium";
+  src: url("/fonts/Montserrat-Medium.ttf") format("truetype");
+}
+@font-face {
+  font-family: "MontserratBold";
+  src: url("/fonts/Montserrat-Bold.ttf") format("truetype");
+}
+
 .orgbtn {
   @apply border-orange-600 text-orange-600 hover:border-transparent  m-1 hover:text-white hover:bg-gradient-to-tr from-orange-600 to-orange-400 shadow-md hover:shadow-orange-500 shadow-transparent duration-300 transition-all ease-in-out;
+}
+.selectedBtn {
+  @apply border-transparent text-white bg-gradient-to-tr from-orange-600 to-orange-400 shadow-md shadow-orange-500 duration-300 transition-all ease-in-out;
+}
+body {
+  @apply font-Montserrat bg-[#0a0503] text-gray-200;
 }

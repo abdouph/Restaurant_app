@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { data } from "../Data/data.js";
 export default function Food() {
   const [foods, setFoods] = useState(data);
+  const [selectedPrice, setSelectedPrice] = useState("$");
+  const [SelectedType, setSelectedType] = useState("All");
   const filterType = (type) => {
     setFoods(
       data.filter((item) => {
@@ -25,19 +27,54 @@ export default function Food() {
         <div className="">
           <p className="font-bold text-gray-700">Filter Type</p>
           <div className="flex justify-between flex-wrap">
-            <button onClick={() => setFoods(data)} className="orgbtn">
+            <button
+              onClick={() => {
+                setFoods(data);
+                setSelectedType("All");
+                setSelectedPrice("");
+              }}
+              className={`orgbtn ${SelectedType === "All" && "selectedBtn"}`}
+            >
               All
             </button>
-            <button onClick={() => filterType("burger")} className="orgbtn">
+            <button
+              onClick={() => {
+                filterType("burger");
+                setSelectedType("Burgers");
+              }}
+              className={`orgbtn ${
+                SelectedType === "Burgers" && "selectedBtn"
+              }`}
+            >
               Burgers
             </button>
-            <button onClick={() => filterType("pizza")} className="orgbtn">
+            <button
+              onClick={() => {
+                filterType("pizza");
+                setSelectedType("Pizza");
+              }}
+              className={`orgbtn ${SelectedType === "Pizza" && "selectedBtn"}`}
+            >
               Pizza
             </button>
-            <button onClick={() => filterType("salad")} className="orgbtn">
+            <button
+              onClick={() => {
+                filterType("salad");
+                setSelectedType("Salads");
+              }}
+              className={`orgbtn ${SelectedType === "Salads" && "selectedBtn"}`}
+            >
               Salads
             </button>
-            <button onClick={() => filterType("chicken")} className="orgbtn">
+            <button
+              onClick={() => {
+                filterType("chicken");
+                setSelectedType("Chicken");
+              }}
+              className={`orgbtn ${
+                SelectedType === "Chicken" && "selectedBtn"
+              }`}
+            >
               Chicken
             </button>
           </div>
@@ -45,16 +82,40 @@ export default function Food() {
         <div>
           <p className="font-bold text-gray-700">Filter Price</p>
           <div className="flex justify-between flex-wrap">
-            <button onClick={() => filterPrice("$")} className="orgbtn">
+            <button
+              onClick={() => {
+                filterPrice("$");
+                setSelectedPrice("$");
+              }}
+              className={`orgbtn ${selectedPrice === "$" && "selectedBtn"}`}
+            >
               $
             </button>
-            <button onClick={() => filterPrice("$$")} className="orgbtn">
+            <button
+              onClick={() => {
+                filterPrice("$$");
+                setSelectedPrice("$$");
+              }}
+              className={`orgbtn ${selectedPrice === "$$" && "selectedBtn"}`}
+            >
               $$
             </button>
-            <button onClick={() => filterPrice("$$$")} className="orgbtn">
+            <button
+              onClick={() => {
+                filterPrice("$$$");
+                setSelectedPrice("$$$");
+              }}
+              className={`orgbtn ${selectedPrice === "$$$" && "selectedBtn"}`}
+            >
               $$$
             </button>
-            <button onClick={() => filterPrice("$$$$")} className="orgbtn">
+            <button
+              onClick={() => {
+                filterPrice("$$$$");
+                setSelectedPrice("$$$$");
+              }}
+              className={`orgbtn ${selectedPrice === "$$$$" && "selectedBtn"}`}
+            >
               $$$$
             </button>
           </div>

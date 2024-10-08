@@ -3,6 +3,12 @@ module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {},
+    fontFamily: {
+      Montserrat: ["Montserrat", "sans-serif"],
+      MontserratLight: ["MontserratLight", "sans-serif"],
+      MontserratMedium: ["MontserratMedium", "sans-serif"],
+      MontserratBold: ["MontserratBold", "sans-serif"],
+    },
   },
   plugins: [],
 };
