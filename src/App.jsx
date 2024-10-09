@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import React, { useRef, useState } from "react";
 import { IoPlayForwardOutline } from "react-icons/io5";
 import "./App.css";
+import bg from "./img/bg.png";
 import logo from "./img/fulllogo.png";
 import { data } from "./Data/data.js";
 
@@ -42,27 +43,14 @@ function App() {
         // src="https://img.freepik.com/premium-photo/restaurant-with-table-chairs-with-lit-candle-middle_337384-108358.jpg?w=826"
         src="https://img.freepik.com/premium-photo/moody-food-restaurant-website_1234738-438608.jpg?w=826"
       /> */}
-      {/* <video
-        autoPlay
-        muted
-        loop
-        className="w-full h-full absolute left-0 top-0 object-cover -z-10"
-        src="https://videocdn.cdnpk.net/videos/ecd54396-8158-47c4-b396-c5d5d46e0647/horizontal/previews/clear/large.mp4?token=exp=1728456070~hmac=bbd3534996785b3e6a36ed1ccf702546e5746dac838e94f53988b73c1c452a79"
-      ></video> */}
       <video
         autoPlay
         muted
         loop
         className="w-full h-full absolute left-0 top-0 object-cover -z-10"
-        src="https://videocdn.cdnpk.net/videos/dd41e41f-ffd2-422a-aa1e-b52200e2af51/horizontal/previews/clear/large.mp4?token=exp=1728461584~hmac=4b6620d772f3e17b5532175ac5a4143a4010896f241f8188b70e319eadf4155b"
+        src="https://firebasestorage.googleapis.com/v0/b/nour-el-djazair.appspot.com/o/6015593_Chef_Man_1920x1080.mp4?alt=media&token=61005777-da89-4b1f-9467-a4749c620732"
       ></video>
-      {/* <video
-        autoPlay
-        muted
-        loop
-        className="w-full h-full absolute left-0 top-0 object-cover -z-10"
-        src="https://videocdn.cdnpk.net/videos/721c2e17-ae52-4a80-975f-8304d166b6d6/horizontal/previews/clear/large.mp4?token=exp=1728458218~hmac=94503ad9a831cf17b24b889e1dc1403eeecf49e7c377136d77c4dfff2b250962"
-      ></video> */}
+
       <div className="w-full h-full absolute left-0 top-0 bg-gray-800/90 mix-blend-multiply -z-10"></div>
       {/* NavBar */}
       <div className="fixed flex justify-between items-start w-full text-white p-5 z-50 bg-gradient-to-b from-black to-transparent">
@@ -160,11 +148,14 @@ function App() {
             transition={{ duration: 0.5, ease: "easeInOut" }} // Transition for buttons
             className="flex items-center justify-center gap-2"
           >
-            <button className="bg-gradient-to-tr from-slate-500 font-medium !px4 to-slate-100 text-black animate">
+            <button className="bg-gradient-to-tr from-slate-500 font- !px4 to-slate-100 text-black animate">
               Discover Our Masterpieces
             </button>
             <button
-              onClick={() => scrollToSection(1)}
+              onClick={() => {
+                scrollToSection(1);
+                setSelectedNav(2);
+              }}
               className="flex bg-transparent hover:bg-slate-300/10 animate items-center gap-2"
             >
               <IoPlayForwardOutline className="text-lg" />
@@ -194,9 +185,43 @@ function App() {
         </div>
       </div> */}
       </div>
-      {/* About section */}
-      <div ref={aboutRef} className="section">
-        About
+      {/* About sections */}
+      <div ref={aboutRef} className="section relative">
+        <img
+          src={bg}
+          className="-z-10 w-full h-full bg-cover object-cover absolute top-0 left-0"
+          alt=""
+        />{" "}
+        <div className="w-full h-full absolute left-0 top-0 bg-gray-800/30 mix-blend-multiply -z-10"></div>
+        <div className="flex items-start justify-center p-10 pt-5 gap-20 px-36 h-full pb-20">
+          <div className="flex w-2/6 flex-col h-full items-center justify-center gap-7">
+            <p className="h-10 text-3xl ">Abous us</p>
+            <div className="rounded-3xl bg-slate-400 w-full flex-grow"></div>
+          </div>
+          <div className="flex w-4/6 flex-col h-full items-end justify-start gap-14">
+            {" "}
+            <div className="rounded-3xl bg-slate-400 w-7/12 h-[25dvh] "></div>
+            <p className="h-10 text-xl capitalize mr-auto mt-auto">
+              Abous us this a <br /> section somthing ama
+            </p>
+            <div className="flex items-center justify-center gap-20 opacity-70">
+              <p className="text-sm">
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illo,
+                id earum. Laboriosam vero quos suscipit ullam, voluptatum qui
+                dignissimos cum error deleniti repudiandae
+              </p>
+              <p className="text-sm">
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illo,
+                id earum. Laboriosam vero quos suscipit ullam, voluptatum qui
+                dignissimos cum error deleniti repudiandae nisi
+              </p>
+            </div>
+          </div>
+        </div>
+        <p className="w-full text-center mb-10 text-4xl mt-20">
+          Watch our story
+        </p>
+        <div className="w-5/6 mx-auto h-[60vh] rounded-xl bg-gray-500"></div>
       </div>
       {/* Menu section */}
       <div ref={menuRef} className="section">

@@ -4,19 +4,19 @@
 
 @font-face {
   font-family: "Montserrat";
-  src: url("/fonts/Montserrat-Regular.ttf") format("truetype");
+  src: url("./fonts/Montserrat-Regular.ttf") format("truetype");
 }
 @font-face {
   font-family: "MontserratLight";
-  src: url("/fonts/Montserrat-Light.ttf") format("truetype");
+  src: url("./fonts/Montserrat-Light.ttf") format("truetype");
 }
 @font-face {
   font-family: "MontserratMedium";
-  src: url("/fonts/Montserrat-Medium.ttf") format("truetype");
+  src: url("./fonts/Montserrat-Medium.ttf") format("truetype");
 }
 @font-face {
   font-family: "MontserratBold";
-  src: url("/fonts/Montserrat-Bold.ttf") format("truetype");
+  src: url("./fonts/Montserrat-Bold.ttf") format("truetype");
 }
 html {
   scroll-behavior: smooth;
@@ -31,8 +31,8 @@ html {
   @apply border-transparent text-white bg-gradient-to-tr from-orange-600 to-orange-400 shadow-md shadow-orange-500 duration-300 transition-all ease-in-out;
 }
 .section {
-  @apply min-h-[100dvh] !pt-[13dvh];
+  @apply min-h-[100dvh] max-h-max w-full !pt-[13dvh];
 }
 body {
-  @apply font-Montserrat bg-[#0a0503] text-gray-200;
+  @apply font-Montserrat bg-[#03040a] text-gray-200;
 }
