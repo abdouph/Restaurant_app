@@ -18,12 +18,20 @@
   font-family: "MontserratBold";
   src: url("/fonts/Montserrat-Bold.ttf") format("truetype");
 }
-
+html {
+  scroll-behavior: smooth;
+}
+.animate {
+  @apply transition-all ease-in-out cursor-pointer opacity-100;
+}
 .orgbtn {
   @apply border-orange-600 text-orange-600 hover:border-transparent  m-1 hover:text-white hover:bg-gradient-to-tr from-orange-600 to-orange-400 shadow-md hover:shadow-orange-500 shadow-transparent duration-300 transition-all ease-in-out;
 }
 .selectedBtn {
   @apply border-transparent text-white bg-gradient-to-tr from-orange-600 to-orange-400 shadow-md shadow-orange-500 duration-300 transition-all ease-in-out;
+}
+.section {
+  @apply min-h-[100dvh] !pt-[13dvh];
 }
 body {
   @apply font-Montserrat bg-[#0a0503] text-gray-200;
