@@ -1,8 +1,16 @@
 import { motion } from "framer-motion";
 import React, { useRef, useState } from "react";
+import { TbBowlSpoon } from "react-icons/tb";
+import { BiDish, BiDrink } from "react-icons/bi";
+import { LuIceCream2, LuSalad } from "react-icons/lu";
 import { IoPlayForwardOutline } from "react-icons/io5";
+import {
+  MdFreeBreakfast,
+  MdOutlineFreeBreakfast,
+  MdShoppingBasket,
+} from "react-icons/md";
 import "./App.css";
-import bg from "./img/bg.png";
+import v from "./img/v.mp4";
 import logo from "./img/fulllogo.png";
 import { data } from "./Data/data.js";
 
@@ -14,9 +22,10 @@ function App() {
   const homeRef = useRef(null);
   const menuRef = useRef(null);
   const aboutRef = useRef(null);
+  const historyRef = useRef(null);
 
   const scrollToSection = (index) => {
-    const sectionRefs = [homeRef, aboutRef, menuRef];
+    const sectionRefs = [homeRef, aboutRef, menuRef, historyRef];
     sectionRefs[index].current.scrollIntoView({ behavior: "smooth" });
   };
   const [foods, setFoods] = useState(data);
@@ -29,13 +38,14 @@ function App() {
       })
     );
   };
-  const filterPrice = (price) => {
-    setFoods(
-      data.filter((item) => {
-        return item.price === price;
-      })
-    );
-  };
+  const types = [
+    { name: "Breakfast", icon: <MdOutlineFreeBreakfast /> },
+    { name: "First courses", icon: <TbBowlSpoon /> },
+    { name: "Main courses", icon: <BiDish /> },
+    { name: "Side dishes", icon: <LuSalad /> },
+    { name: "Desserts", icon: <LuIceCream2 /> },
+    { name: "Drinks", icon: <BiDrink /> },
+  ];
   return (
     <div className="w-[100dvw]  overflow-y-auto relative h-[100dvh] overflow-hidden flex flex-col items-center justify-start">
       {/* <img
@@ -53,7 +63,7 @@ function App() {
 
       <div className="w-full h-full absolute left-0 top-0 bg-gray-800/90 mix-blend-multiply -z-10"></div>
       {/* NavBar */}
-      <div className="fixed flex justify-between items-start w-full text-white p-5 z-50 bg-gradient-to-b from-black to-transparent">
+      <div className="fixed flex justify-between items-start w-[98dvw] text-white p-5 z-50 bg-gradient-to-b from-black to-transparent">
         <img src={logo} className="w-16 h-16 ml-5 object-contain" alt="" />{" "}
         <div className="relative flex mt-2 items-center justify-center gap-16 text-sm ">
           {navItems.map((item, index) => (
@@ -82,7 +92,7 @@ function App() {
         </div>{" "}
         <button
           // onClick={() => setSelectedNav(index + 1)}
-          className={`bg-white animate mr-5 mt-1 !opacity-100 text-black font-medium hover:bg-gradient-to-tr from-slate-500 to-slate-100`}
+          className={`animate mr-5 mt-1 !opacity-100 text-black font-medium hover:shadow-white/30 hover:shadow-lg bg-gradient-to-tr from-slate-500 to-slate-100`}
         >
           Contact
         </button>
@@ -148,12 +158,18 @@ function App() {
             transition={{ duration: 0.5, ease: "easeInOut" }} // Transition for buttons
             className="flex items-center justify-center gap-2"
           >
-            <button className="bg-gradient-to-tr from-slate-500 font- !px4 to-slate-100 text-black animate">
+            <button
+              onClick={() => {
+                scrollToSection(2);
+                setSelectedNav(3);
+              }}
+              className="bg-gradient-to-tr from-slate-500 font-semibold !px4 to-slate-100 text-black animate"
+            >
               Discover Our Masterpieces
             </button>
             <button
               onClick={() => {
-                scrollToSection(1);
+                scrollToSection(3);
                 setSelectedNav(2);
               }}
               className="flex bg-transparent hover:bg-slate-300/10 animate items-center gap-2"
@@ -184,226 +200,251 @@ function App() {
           </button>
         </div>
       </div> */}
+        <div className="absolute w-full h-[20dvh] bg-gradident-to-t from-transparent via-black to-transparent -bottom-[10dvh]"></div>
       </div>
       {/* About sections */}
-      <div ref={aboutRef} className="section relative">
+      <div ref={aboutRef} className=" w-full !pt-[11.5dvh] pb-32 relative">
         <img
-          src={bg}
+          src={
+            "https://img.freepik.com/free-vector/elegant-black-gold-marble-effect-background-with-gold-glitter_1048-18886.jpg?t=st=1728666110~exp=1728669710~hmac=457e7570549afeef01352408f7334c154563ff48373cc8baf300a9f2191a7bc3&w=740"
+          }
+          // src={bg}
+          style={{ filter: "blur(2px)" }}
           className="-z-10 w-full h-full bg-cover object-cover absolute top-0 left-0"
           alt=""
         />{" "}
-        <div className="w-full h-full absolute left-0 top-0 bg-gray-800/30 mix-blend-multiply -z-10"></div>
-        <div className="flex items-start justify-center p-10 pt-5 gap-20 px-36 h-full pb-20">
+        <div className="w-full h-full absolute left-0 top-0 bg-gray-700 mix-blend-multiply -z-10"></div>
+        <div className="flex items-start justify-center p-10 pt-5 gap-20 px-36 h-[90dvh] pb-10">
           <div className="flex w-2/6 flex-col h-full items-center justify-center gap-7">
             <p className="h-10 text-3xl ">Abous us</p>
-            <div className="rounded-3xl bg-slate-400 w-full flex-grow"></div>
+            <video
+              src={v}
+              autoPlay
+              loop
+              className="rounded-3xl h-[70dvh] object-cover w-full flex-grow"
+            />
           </div>
           <div className="flex w-4/6 flex-col h-full items-end justify-start gap-14">
-            {" "}
-            <div className="rounded-3xl bg-slate-400 w-7/12 h-[25dvh] "></div>
-            <p className="h-10 text-xl capitalize mr-auto mt-auto">
-              Abous us this a <br /> section somthing ama
+            <img
+              src="https://img.freepik.com/free-photo/grilled-beef-fillet-with-vegetable-appetizer-plate-generated-by-ai_188544-24766.jpg?t=st=1728669741~exp=1728673341~hmac=a5173a79ad7a40bedbd310acce476ac05082aa142a3ea2386793477974586758&w=826"
+              alt=""
+              className="rounded-xl object-cover w-7/12 h-[27dvh]"
+            />
+            <p className="h-10 uppercase text-xl  mr-auto mt-auto">
+              The rich history <br /> of our restaurant
             </p>
-            <div className="flex items-center justify-center gap-20 opacity-70">
-              <p className="text-sm">
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illo,
-                id earum. Laboriosam vero quos suscipit ullam, voluptatum qui
-                dignissimos cum error deleniti repudiandae
+            <div className="flex items-start justify-center gap-14 opacity-70 text-xs font-MontserratLight leading-5">
+              <p className="w-1/2">
+                Nestled in the heart of Casbah, a city steeped in rich history
+                and cultural legacy, Noor El Djazair stands as a tribute to
+                centuries of Mediterranean charm and Algerian warmth.
               </p>
-              <p className="text-sm">
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illo,
-                id earum. Laboriosam vero quos suscipit ullam, voluptatum qui
-                dignissimos cum error deleniti repudiandae nisi
+              <p className="w-1/2">
+                Founded in 1995, Noor El Djazair has since become a premier
+                destination for culinary enthusiasts, blending traditional
+                Algerian cuisine with modern elegance to create an unforgettable
+                dining experience.
               </p>
             </div>
           </div>
         </div>
-        <p className="w-full text-center mb-10 text-4xl mt-20">
+        <p
+          ref={historyRef}
+          className="w-full pt-24 text-center mb-5 text-4xl mt-10"
+        >
           Watch our story
         </p>
-        <div className="w-5/6 mx-auto h-[60vh] rounded-xl bg-gray-500"></div>
+        <div className="w-4/6 mx-auto h-[70vh] rounded-xl bg-gray-500"></div>
       </div>
       {/* Menu section */}
-      <div ref={menuRef} className="section">
-        <div className="mx-auto p-4 py-8 max-w-[1640px] ">
-          <h1 className="font-bold text-orange-600 text-4xl text-center">
-            Top Rated Menu Items
-          </h1>
-          <div className="flex flex-col lg:flex-row justify-between">
-            <div className="">
-              <p className="font-bold text-gray-700">Filter Type</p>
-              <div className="flex justify-between flex-wrap">
-                <button
-                  onClick={() => {
-                    setFoods(data);
-                    setSelectedType("All");
-                    setSelectedPrice("");
-                  }}
-                  className={`orgbtn ${
-                    SelectedType === "All" && "selectedBtn"
-                  }`}
-                >
-                  All
-                </button>
-                <button
-                  onClick={() => {
-                    filterType("burger");
-                    setSelectedType("Burgers");
-                  }}
-                  className={`orgbtn ${
-                    SelectedType === "Burgers" && "selectedBtn"
-                  }`}
-                >
-                  Burgers
-                </button>
-                <button
-                  onClick={() => {
-                    filterType("pizza");
-                    setSelectedType("Pizza");
-                  }}
-                  className={`orgbtn ${
-                    SelectedType === "Pizza" && "selectedBtn"
-                  }`}
-                >
-                  Pizza
-                </button>
-                <button
-                  onClick={() => {
-                    filterType("salad");
-                    setSelectedType("Salads");
-                  }}
-                  className={`orgbtn ${
-                    SelectedType === "Salads" && "selectedBtn"
-                  }`}
-                >
-                  Salads
-                </button>
-                <button
-                  onClick={() => {
-                    filterType("chicken");
-                    setSelectedType("Chicken");
-                  }}
-                  className={`orgbtn ${
-                    SelectedType === "Chicken" && "selectedBtn"
-                  }`}
-                >
-                  Chicken
-                </button>
-              </div>
+      <div
+        ref={menuRef}
+        className="flex relative flex-col items-start gap-4 pt-28 p-10"
+      >
+        <p className="h-10 text-2xl ">Menu</p>
+        <img
+          src={
+            "https://img.freepik.com/free-vector/elegant-black-gold-marble-effect-background-with-gold-glitter_1048-18886.jpg?t=st=1728666110~exp=1728669710~hmac=457e7570549afeef01352408f7334c154563ff48373cc8baf300a9f2191a7bc3&w=740"
+          }
+          // src={bg}
+          style={{ filter: "blur(2px)" }}
+          className="-z-10 w-full h-full bg-cover object-cover absolute top-0 left-0"
+          alt=""
+        />
+        <div className="w-full h-full absolute left-0 top-0 bg-gray-700 mix-blend-multiply -z-10"></div>
+        <div className="flex items-center justify-start gap-10">
+          {types.map((type, index) => (
+            <div
+              key={index}
+              onClick={() => {
+                setSelectedType(index);
+              }}
+              className={`flex items-center gap-2 text-zinc-500 hover:font-semibold hover:text-zinc-400/70 hover:border-b-zinc-400/70 pb-[0.05rem] border-b-2 border-transparent animate ${
+                index === SelectedType &&
+                " font-semibold text-zinc-400 border-b-zinc-400 "
+              }`}
+            >
+              {type.icon}
+              {type.name}
             </div>
-            <div>
-              <p className="font-bold text-gray-700">Filter Price</p>
-              <div className="flex justify-between flex-wrap">
-                <button
-                  onClick={() => {
-                    filterPrice("$");
-                    setSelectedPrice("$");
-                  }}
-                  className={`orgbtn ${selectedPrice === "$" && "selectedBtn"}`}
+          ))}
+        </div>
+        <div className="flex justify-start ">
+          <button
+            onClick={() => {
+              setFoods(data);
+              setSelectedType("All");
+              setSelectedPrice("");
+            }}
+            className={`orgbtn ${SelectedType === "All" && "selectedBtn"}`}
+          >
+            All
+          </button>
+          <button
+            onClick={() => {
+              filterType("burger");
+              setSelectedType("Burgers");
+            }}
+            className={`orgbtn ${SelectedType === "Burgers" && "selectedBtn"}`}
+          >
+            Burgers
+          </button>
+          <button
+            onClick={() => {
+              filterType("pizza");
+              setSelectedType("Pizza");
+            }}
+            className={`orgbtn ${SelectedType === "Pizza" && "selectedBtn"}`}
+          >
+            Pizza
+          </button>
+          <button
+            onClick={() => {
+              filterType("salad");
+              setSelectedType("Salads");
+            }}
+            className={`orgbtn ${SelectedType === "Salads" && "selectedBtn"}`}
+          >
+            Salads
+          </button>
+          <button
+            onClick={() => {
+              filterType("chicken");
+              setSelectedType("Chicken");
+            }}
+            className={`orgbtn ${SelectedType === "Chicken" && "selectedBtn"}`}
+          >
+            Chicken
+          </button>
+        </div>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 pt-4 cursor-pointer">
+          {foods.map((item, index) => (
+            // <div
+            //   key={index}
+            //   className="border shadow-lg rounded-lg hover:scale-105 duration-300"
+            // >
+            //   <img
+            //     src={item.image}
+            //     alt={item.name}
+            //     className="w-full h-[200px] object-cover rounded-t-lg"
+            //   />
+            //   <div className="flex justify-between px-2 py-4">
+            //     <p className="font-bold">{item.name}</p>
+            //     <p>
+            //       <span className="bg-orange-500 text-white px-2 py-1 rounded-full">
+            //         {item.price}
+            //       </span>
+            //     </p>
+            //   </div>
+            // </div>
+            <motion.div
+              key={index}
+              whileHover={{ scale: 1.02 }}
+              className="w-275 my-12 bg-slate-400/5  w-[285px] min-w-[275px] p-4 hover:drop-shadow-lg  shadow-md rounded-lg h-[165px] backdrop-blur-md duration-75 ease-in-out flex flex-col justify-between items-center"
+            >
+              <div className="w-full relative flex justify-between items-center ">
+                <motion.div
+                  whileHover={{ scale: 1.2 }}
+                  className="w-32 h-32 absolute -mt-8 drop-shadow-xl"
                 >
-                  $
-                </button>
-                <button
-                  onClick={() => {
-                    filterPrice("$$");
-                    setSelectedPrice("$$");
-                  }}
-                  className={`orgbtn ${
-                    selectedPrice === "$$" && "selectedBtn"
-                  }`}
+                  <img
+                    className=" w-full h-full object-contain"
+                    src={item.image}
+                    alt=""
+                  />
+                </motion.div>
+                <motion.div
+                  whileTap={{ scale: 0.75 }}
+                  // onClick={() => {
+                  //   setItems([...cartItems, item]);
+                  // }}
+                  className="bg-red-600 rounded-full ml-auto w-8 h-8 cursor-pointer hover:drop-shadow-md flex items-center justify-center"
                 >
-                  $$
-                </button>
-                <button
-                  onClick={() => {
-                    filterPrice("$$$");
-                    setSelectedPrice("$$$");
-                  }}
-                  className={`orgbtn ${
-                    selectedPrice === "$$$" && "selectedBtn"
-                  }`}
-                >
-                  $$$
-                </button>
-                <button
-                  onClick={() => {
-                    filterPrice("$$$$");
-                    setSelectedPrice("$$$$");
-                  }}
-                  className={`orgbtn ${
-                    selectedPrice === "$$$$" && "selectedBtn"
-                  }`}
-                >
-                  $$$$
-                </button>
+                  <MdShoppingBasket className="text-white" />
+                </motion.div>
               </div>
-            </div>
-          </div>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 pt-4 cursor-pointer">
-            {foods.map((item, index) => (
-              <div
-                key={index}
-                className="border shadow-lg rounded-lg hover:scale-105 duration-300"
-              >
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className="w-full h-[200px] object-cover rounded-t-lg"
-                />
-                <div className="flex justify-between px-2 py-4">
-                  <p className="font-bold">{item.name}</p>
-                  <p>
-                    <span className="bg-orange-500 text-white px-2 py-1 rounded-full">
-                      {item.price}
-                    </span>
+              <div className="flex flex-col items-end justify-end w-full h-full ">
+                <p className="text-base text-textColor font-semibold md:text-lg">
+                  {item.name}
+                </p>
+                <p className="mt-1 text-xs text-gray-500">
+                  {" "}
+                  {item.price} Calories
+                </p>
+                <div className="flex items-center justify-center">
+                  <p className="text-headingColor text-lg font-semibold">
+                    <span className="text-sm font-semibold text-red-500">
+                      DZD
+                    </span>{" "}
+                    {item.price}
                   </p>
                 </div>
               </div>
-            ))}
-          </div>{" "}
-          <div className="mx-auto p-8 max-w-[1640px] grid md:grid-cols-3 gap-6">
-            <div className="relative rounded-xl">
-              <div className="absolute w-full h-full bg-black/50 text-white rounded-xl">
-                <p className="px-2 py-4 font-bold text-2xl">Text 1, Text2</p>
-                <p className="px-2">From 15/08/99</p>
-                <button className="bg-white border-white text-black mx-2 absolute bottom-4 ">
-                  Order now
-                </button>
-              </div>
-              <img
-                className="max-h-[168px] md:max-h-[200px] w-full object-cover rounded-xl"
-                src="https://images.pexels.com/photos/566566/pexels-photo-566566.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                alt=""
-              />
+            </motion.div>
+          ))}
+        </div>{" "}
+        <div className="mx-auto p-8 max-w-[1640px] grid md:grid-cols-3 gap-6">
+          <div className="relative rounded-xl">
+            <div className="absolute w-full h-full bg-black/50 text-white rounded-xl">
+              <p className="px-2 py-4 font-bold text-2xl">Text 1, Text2</p>
+              <p className="px-2">From 15/08/99</p>
+              <button className="bg-white border-white text-black mx-2 absolute bottom-4 ">
+                Order now
+              </button>
             </div>
-            <div className="relative rounded-xl">
-              <div className="absolute w-full h-full bg-black/50 text-white rounded-xl">
-                <p className="px-2 py-4 font-bold text-2xl">New Restaurant</p>
-                <p className="px-2">From 15/08/99</p>
-                <button className="bg-white border-white text-black mx-2 absolute bottom-4 ">
-                  Order now
-                </button>
-              </div>
-              <img
-                className="max-h-[168px] md:max-h-[200px] w-full object-cover rounded-xl"
-                src="https://images.pexels.com/photos/1031780/pexels-photo-1031780.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                alt=""
-              />
+            <img
+              className="max-h-[168px] md:max-h-[200px] w-full object-cover rounded-xl"
+              src="https://images.pexels.com/photos/566566/pexels-photo-566566.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+              alt=""
+            />
+          </div>
+          <div className="relative rounded-xl">
+            <div className="absolute w-full h-full bg-black/50 text-white rounded-xl">
+              <p className="px-2 py-4 font-bold text-2xl">New Restaurant</p>
+              <p className="px-2">From 15/08/99</p>
+              <button className="bg-white border-white text-black mx-2 absolute bottom-4 ">
+                Order now
+              </button>
             </div>
-            <div className="relative rounded-xl">
-              <div className="absolute w-full h-full bg-black/50 text-white rounded-xl">
-                <p className="px-2 py-4 font-bold text-2xl">Some Desert</p>
-                <p className="px-2">From 15/08/99</p>
-                <button className="bg-white border-white text-black mx-2 absolute bottom-4 ">
-                  Order now
-                </button>
-              </div>
-              <img
-                className="w-full object-cover rounded-xl"
-                src="https://images.pexels.com/photos/2273823/pexels-photo-2273823.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                alt=""
-              />
+            <img
+              className="max-h-[168px] md:max-h-[200px] w-full object-cover rounded-xl"
+              src="https://images.pexels.com/photos/1031780/pexels-photo-1031780.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+              alt=""
+            />
+          </div>
+          <div className="relative rounded-xl">
+            <div className="absolute w-full h-full bg-black/50 text-white rounded-xl">
+              <p className="px-2 py-4 font-bold text-2xl">Some Desert</p>
+              <p className="px-2">From 15/08/99</p>
+              <button className="bg-white border-white text-black mx-2 absolute bottom-4 ">
+                Order now
+              </button>
             </div>
+            <img
+              className="w-full object-cover rounded-xl"
+              src="https://images.pexels.com/photos/2273823/pexels-photo-2273823.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+              alt=""
+            />
           </div>
         </div>
       </div>

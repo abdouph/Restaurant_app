@@ -18,6 +18,23 @@
   font-family: "MontserratBold";
   src: url("./fonts/Montserrat-Bold.ttf") format("truetype");
 }
+@font-face {
+  font-family: "UniRegular";
+  src: url("./fonts/BAUHS93.TTF");
+}
+@font-face {
+  font-family: "UniBold";
+  src: url("./fonts/Fontfabric\ -\ UniNeueBold.otf") format("opentype");
+}
+@font-face {
+  font-family: "UniBook";
+  src: url("./fonts/Fontfabric\ -\ UniNeueBold.otf") format("opentype");
+}
+@font-face {
+  font-family: "UniHeavy";
+  src: url("./fonts/Fontfabric\ -\ UniNeueHeavy.otf") format("opentype");
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -31,7 +48,7 @@ html {
   @apply border-transparent text-white bg-gradient-to-tr from-orange-600 to-orange-400 shadow-md shadow-orange-500 duration-300 transition-all ease-in-out;
 }
 .section {
-  @apply min-h-[100dvh] max-h-max w-full !pt-[13dvh];
+  @apply !min-h-[100dvh]  w-full !pt-[13dvh];
 }
 body {
   @apply font-Montserrat bg-[#03040a] text-gray-200;
