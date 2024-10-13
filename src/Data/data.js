@@ -1,27 +1,32 @@
+import b from "../img/c6.png";
+import c from "../img/cu3.png";
+import d from "../img/fi1.png";
 export const data = [
   {
     id: 1,
-    name: "Double Cheeseburger",
+    name: "Double Cheese burger",
     category: "burger",
-    image:
-      "https://images.unsplash.com/photo-1607013251379-e6eecfffe234?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YnVyZ2Vyc3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=1400&q=60",
-    price: "$$$$",
+    cal: "Onion, fromae, lait, olive, Onion, fromae, lait, olives",
+    image: b,
+    price: 1500,
   },
   {
     id: 2,
-    name: "Bacon Cheeseburger",
+    name: "Bacon Cheese burger",
+    cal: "Tomat, Salade, jus",
+
     category: "burger",
-    image:
-      "https://images.unsplash.com/photo-1553979459-d2229ba7433b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTh8fGJ1cmdlcnN8ZW58MHx8MHx8&auto=format&fit=crop&w=1400&q=60",
-    price: "$",
+    image: c,
+    price: 1200,
   },
   {
     id: 3,
     name: "Mushroom Burger",
+    cal: "Lait, coffé, croisson",
+
     category: "burger",
-    image:
-      "https://images.unsplash.com/photo-1608767221051-2b9d18f35a2f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTV8fGJ1cmdlcnN8ZW58MHx8MHx8&auto=format&fit=crop&w=1400&q=60",
-    price: "$$",
+    image: d,
+    price: 750,
   },
   {
     id: 4,
@@ -121,7 +126,7 @@ export const data = [
   },
   {
     id: 16,
-    name: "Chicken Kabob",
+    name: "Triple Chicken Dish",
     category: "chicken",
     image:
       "https://images.unsplash.com/photo-1603360946369-dc9bb6258143?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTN8fGNoaWNrZW4lMjBmb29kfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=800&q=60",

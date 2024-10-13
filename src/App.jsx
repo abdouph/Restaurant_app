@@ -1,9 +1,11 @@
 import { motion } from "framer-motion";
-import React, { useRef, useState } from "react";
-import { TbBowlSpoon } from "react-icons/tb";
+import React, { useEffect, useRef, useState } from "react";
+import { TbBowlSpoon, TbFish, TbGrill } from "react-icons/tb";
 import { BiDish, BiDrink } from "react-icons/bi";
 import { LuIceCream2, LuSalad } from "react-icons/lu";
-import { IoPlayForwardOutline } from "react-icons/io5";
+import { PiCookingPot } from "react-icons/pi";
+import { RiVipCrownLine } from "react-icons/ri";
+import { IoPizzaOutline, IoPlayForwardOutline } from "react-icons/io5";
 import {
   MdFreeBreakfast,
   MdOutlineFreeBreakfast,
@@ -29,8 +31,7 @@ function App() {
     sectionRefs[index].current.scrollIntoView({ behavior: "smooth" });
   };
   const [foods, setFoods] = useState(data);
-  const [selectedPrice, setSelectedPrice] = useState("$");
-  const [SelectedType, setSelectedType] = useState("All");
+  const [SelectedType, setSelectedType] = useState(0);
   const filterType = (type) => {
     setFoods(
       data.filter((item) => {
@@ -39,13 +40,39 @@ function App() {
     );
   };
   const types = [
-    { name: "Breakfast", icon: <MdOutlineFreeBreakfast /> },
-    { name: "First courses", icon: <TbBowlSpoon /> },
-    { name: "Main courses", icon: <BiDish /> },
-    { name: "Side dishes", icon: <LuSalad /> },
-    { name: "Desserts", icon: <LuIceCream2 /> },
-    { name: "Drinks", icon: <BiDrink /> },
+    { name: "Our selection", icon: <RiVipCrownLine className="text-lg" /> },
+    { name: "Hot Dishes", icon: <PiCookingPot className="text-lg" /> },
+    { name: "Fish & Seafood", icon: <TbFish className="text-lg" /> },
+    { name: "Grilled Meats", icon: <TbGrill className="text-lg" /> },
+    { name: "Pizza", icon: <IoPizzaOutline className="text-lg" /> },
+    { name: "Salads", icon: <LuSalad className="text-lg" /> },
+    { name: "Desserts", icon: <LuIceCream2 className="text-lg" /> },
+    { name: "Drinks", icon: <BiDrink className="text-lg" /> },
   ];
+  const paragraphRefs = useRef([]);
+
+  useEffect(() => {
+    paragraphRefs.current.forEach((paragraph) => {
+      if (paragraph) {
+        const words = paragraph.innerText.split(" ");
+        let firstLine = "";
+        let restOfParagraph = "";
+        let charCount = 0;
+
+        for (let i = 0; i < words.length; i++) {
+          const testLine = firstLine + words[i] + " ";
+          if (charCount + words[i].length + 1 > 12) {
+            restOfParagraph = words.slice(i).join(" ");
+            break;
+          }
+          firstLine = testLine;
+          charCount += words[i].length + 1;
+        }
+
+        paragraph.innerHTML = `${firstLine.trim()}<br/> ${restOfParagraph}`;
+      }
+    });
+  }, [, foods]);
   return (
     <div className="w-[100dvw]  overflow-y-auto relative h-[100dvh] overflow-hidden flex flex-col items-center justify-start">
       {/* <img
@@ -180,26 +207,6 @@ function App() {
           </motion.div>
         </motion.div>
 
-        {/* <div className=" h-full w-full text-gray-200 items-start px-10 flex py-20 flex-col justify-end gap-5 rounded-xl">
-        <p className="text-left text-6xl font-medium leading-[4.5rem]">
-          Where Every Meal <br /> Tells a
-          <span className="text-slate-400"> Story</span>
-        </p>
-        <p className="w-[37vw] font-light opacity-80 text-left leading-7">
-          Experience the fusion of Mediterranean flavors, exquisite spices, and
-          the warmth of Algerian hospitality, all in one unforgettable dining
-          experience
-        </p>
-        <div className="flex items-center justify-center gap-7">
-          <button className="bg-gradient-to-tr from-slate-500 font-medium !px4 to-slate-100 text-black animate">
-            Discover Our Masterpieces
-          </button>
-          <button className="flex bg-transparent hover:bg-slate-300/10 animate items-center gap-2">
-            <IoPlayForwardOutline className="text-lg" />
-            Watch our story
-          </button>
-        </div>
-      </div> */}
         <div className="absolute w-full h-[20dvh] bg-gradident-to-t from-transparent via-black to-transparent -bottom-[10dvh]"></div>
       </div>
       {/* About sections */}
@@ -278,8 +285,9 @@ function App() {
               key={index}
               onClick={() => {
                 setSelectedType(index);
+                // filterType(index);
               }}
-              className={`flex items-center gap-2 text-zinc-500 hover:font-semibold hover:text-zinc-400/70 hover:border-b-zinc-400/70 pb-[0.05rem] border-b-2 border-transparent animate ${
+              className={`flex items-center gap-1 text-zinc-500 hover:font-semibold hover:text-zinc-400/70 hover:border-b-zinc-400/70 pb-[0.05rem] border-b-2 border-transparent animate ${
                 index === SelectedType &&
                 " font-semibold text-zinc-400 border-b-zinc-400 "
               }`}
@@ -288,54 +296,6 @@ function App() {
               {type.name}
             </div>
           ))}
-        </div>
-        <div className="flex justify-start ">
-          <button
-            onClick={() => {
-              setFoods(data);
-              setSelectedType("All");
-              setSelectedPrice("");
-            }}
-            className={`orgbtn ${SelectedType === "All" && "selectedBtn"}`}
-          >
-            All
-          </button>
-          <button
-            onClick={() => {
-              filterType("burger");
-              setSelectedType("Burgers");
-            }}
-            className={`orgbtn ${SelectedType === "Burgers" && "selectedBtn"}`}
-          >
-            Burgers
-          </button>
-          <button
-            onClick={() => {
-              filterType("pizza");
-              setSelectedType("Pizza");
-            }}
-            className={`orgbtn ${SelectedType === "Pizza" && "selectedBtn"}`}
-          >
-            Pizza
-          </button>
-          <button
-            onClick={() => {
-              filterType("salad");
-              setSelectedType("Salads");
-            }}
-            className={`orgbtn ${SelectedType === "Salads" && "selectedBtn"}`}
-          >
-            Salads
-          </button>
-          <button
-            onClick={() => {
-              filterType("chicken");
-              setSelectedType("Chicken");
-            }}
-            className={`orgbtn ${SelectedType === "Chicken" && "selectedBtn"}`}
-          >
-            Chicken
-          </button>
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 pt-4 cursor-pointer">
           {foods.map((item, index) => (
@@ -360,9 +320,9 @@ function App() {
             <motion.div
               key={index}
               whileHover={{ scale: 1.02 }}
-              className="w-275 my-12 bg-slate-400/5  w-[285px] min-w-[275px] p-4 hover:drop-shadow-lg  shadow-md rounded-lg h-[165px] backdrop-blur-md duration-75 ease-in-out flex flex-col justify-between items-center"
+              className="my-12 bg-slate-400/5  w-[285px]  p-4 hover:drop-shadow-lg  shadow-md rounded-lg h-[165px] backdrop-blur-md duration-75 ease-in-out flex flex-col justify-between items-center"
             >
-              <div className="w-full relative flex justify-between items-center ">
+              <div className="w-full relative flex justify-end items-center ">
                 <motion.div
                   whileHover={{ scale: 1.2 }}
                   className="w-32 h-32 absolute -mt-8 drop-shadow-xl"
@@ -372,32 +332,34 @@ function App() {
                     src={item.image}
                     alt=""
                   />
-                </motion.div>
-                <motion.div
-                  whileTap={{ scale: 0.75 }}
-                  // onClick={() => {
-                  //   setItems([...cartItems, item]);
-                  // }}
-                  className="bg-red-600 rounded-full ml-auto w-8 h-8 cursor-pointer hover:drop-shadow-md flex items-center justify-center"
-                >
-                  <MdShoppingBasket className="text-white" />
-                </motion.div>
+                </motion.div>{" "}
               </div>
-              <div className="flex flex-col items-end justify-end w-full h-full ">
-                <p className="text-base text-textColor font-semibold md:text-lg">
-                  {item.name}
-                </p>
-                <p className="mt-1 text-xs text-gray-500">
-                  {" "}
-                  {item.price} Calories
-                </p>
-                <div className="flex items-center justify-center">
-                  <p className="text-headingColor text-lg font-semibold">
-                    <span className="text-sm font-semibold text-red-500">
-                      DZD
-                    </span>{" "}
-                    {item.price}
+              <div className="flex flex-col items-start justify-between w-full h-full ">
+                <div className="flex flex-col items-start justify-center w-full ">
+                  <p
+                    ref={(el) => (paragraphRefs.current[index] = el)}
+                    className="text-lg font-semibold "
+                  >
+                    {item.name}
                   </p>
+                  <p className="mt-1 text-xs text-gray-500">{item.cal}</p>
+                </div>{" "}
+                <div className="flex w-full items-center justify-between">
+                  <p className="text-headingColor text-lg font-semibold">
+                    {item.price}{" "}
+                    <span className="text-sm font-semibold text-slate-500">
+                      DZD
+                    </span>
+                  </p>{" "}
+                  <motion.div
+                    whileTap={{ scale: 0.75 }}
+                    // onClick={() => {
+                    //   setItems([...cartItems, item]);
+                    // }}
+                    className="bg-slate-600 rounded-full ml-auto w-8 h-8 cursor-pointer hover:drop-shadow-md flex items-center justify-center"
+                  >
+                    <MdShoppingBasket className="text-white" />
+                  </motion.div>{" "}
                 </div>
               </div>
             </motion.div>
