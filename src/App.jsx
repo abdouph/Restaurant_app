@@ -33,21 +33,33 @@ function App() {
   const [foods, setFoods] = useState(data);
   const [SelectedType, setSelectedType] = useState(0);
   const filterType = (type) => {
-    setFoods(
-      data.filter((item) => {
-        return item.category === type;
-      })
-    );
+    console.log(type);
+    if (type === -1) {
+      setFoods(
+        data.filter((item) => {
+          return item.fav !== undefined;
+        })
+      );
+    } else
+      setFoods(
+        data.filter((item) => {
+          return item.category === type;
+        })
+      );
   };
   const types = [
-    { name: "Our selection", icon: <RiVipCrownLine className="text-lg" /> },
-    { name: "Hot Dishes", icon: <PiCookingPot className="text-lg" /> },
-    { name: "Fish & Seafood", icon: <TbFish className="text-lg" /> },
-    { name: "Grilled Meats", icon: <TbGrill className="text-lg" /> },
-    { name: "Pizza", icon: <IoPizzaOutline className="text-lg" /> },
-    { name: "Salads", icon: <LuSalad className="text-lg" /> },
-    { name: "Desserts", icon: <LuIceCream2 className="text-lg" /> },
-    { name: "Drinks", icon: <BiDrink className="text-lg" /> },
+    {
+      id: -1,
+      name: "Our selection",
+      icon: <RiVipCrownLine className="text-lg" />,
+    },
+    { id: 0, name: "Hot Dishes", icon: <PiCookingPot className="text-lg" /> },
+    { id: 1, name: "Fish & Seafood", icon: <TbFish className="text-lg" /> },
+    { id: 2, name: "Grilled Meats", icon: <TbGrill className="text-lg" /> },
+    { id: 3, name: "Pizza", icon: <IoPizzaOutline className="text-lg" /> },
+    { id: 4, name: "Salads", icon: <LuSalad className="text-lg" /> },
+    { id: 5, name: "Desserts", icon: <LuIceCream2 className="text-lg" /> },
+    { id: 6, name: "Drinks", icon: <BiDrink className="text-lg" /> },
   ];
   const paragraphRefs = useRef([]);
 
@@ -285,7 +297,7 @@ function App() {
               key={index}
               onClick={() => {
                 setSelectedType(index);
-                // filterType(index);
+                filterType(index - 1);
               }}
               className={`flex items-center gap-1 text-zinc-500 hover:font-semibold hover:text-zinc-400/70 hover:border-b-zinc-400/70 pb-[0.05rem] border-b-2 border-transparent animate ${
                 index === SelectedType &&
@@ -338,11 +350,11 @@ function App() {
                 <div className="flex flex-col items-start justify-center w-full ">
                   <p
                     ref={(el) => (paragraphRefs.current[index] = el)}
-                    className="text-lg font-semibold "
+                    className="text-lg font-semibold h-14"
                   >
                     {item.name}
                   </p>
-                  <p className="mt-1 text-xs text-gray-500">{item.cal}</p>
+                  <p className="mt-1 text-xs text-gray-500">{item.desc}</p>
                 </div>{" "}
                 <div className="flex w-full items-center justify-between">
                   <p className="text-headingColor text-lg font-semibold">
