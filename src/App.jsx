@@ -1,26 +1,24 @@
+import { Dialog, DialogBody } from "@material-tailwind/react";
 import { motion } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
-import { TbBowlSpoon, TbFish, TbGrill } from "react-icons/tb";
-import { BiDish, BiDrink } from "react-icons/bi";
-import { LuIceCream2, LuSalad } from "react-icons/lu";
-import { PiCookingPot } from "react-icons/pi";
-import { RiVipCrownLine } from "react-icons/ri";
+import { BiDrink, BiSolidDish } from "react-icons/bi";
 import { IoPizzaOutline, IoPlayForwardOutline } from "react-icons/io5";
-import {
-  MdFreeBreakfast,
-  MdOutlineFreeBreakfast,
-  MdShoppingBasket,
-} from "react-icons/md";
+import { LuIceCream2, LuSalad } from "react-icons/lu";
+import { MdFoodBank, MdShoppingBasket } from "react-icons/md";
+import { PiCookingPot, PiShoppingCart } from "react-icons/pi";
+import { RiVipCrownLine } from "react-icons/ri";
+import { TbFish, TbGrill } from "react-icons/tb";
 import "./App.css";
-import v from "./img/v.mp4";
-import logo from "./img/fulllogo.png";
 import { data } from "./Data/data.js";
-
+import logo from "./img/fulllogo.png";
+import v from "./img/v.mp4";
+import bell from "./audio/bell.mp3";
+import { Badge, message } from "antd";
 function App() {
   const [selectedNav, setSelectedNav] = useState(1);
   const navItems = ["Home", "About", "Menu"];
+  const audioRef = useRef(null);
 
-  // Create refs for sections
   const homeRef = useRef(null);
   const menuRef = useRef(null);
   const aboutRef = useRef(null);
@@ -85,8 +83,23 @@ function App() {
       }
     });
   }, [, foods]);
+  useEffect(() => {
+    filterType(-1);
+  }, []);
+  const [selectedDish, setSelectedDish] = useState(foods[0]);
+  const [openDish, setOpenDish] = useState(false);
+  const [messageApi, contextHolder] = message.useMessage();
+  const info = (msg) => {
+    messageApi.open({
+      content: msg,
+      duration: 5,
+      icon: <BiSolidDish className="!text-lg !mr-2" />,
+    });
+  };
+  const [orders, setOrders] = useState(0);
   return (
     <div className="w-[100dvw]  overflow-y-auto relative h-[100dvh] overflow-hidden flex flex-col items-center justify-start">
+      {contextHolder} <audio ref={audioRef} src={bell} preload="auto" />
       {/* <img
         className="w-full h-full absolute left-0 top-0object-cover -z-10"
         // src="https://img.freepik.com/premium-photo/restaurant-with-table-chairs-with-lit-candle-middle_337384-108358.jpg?w=826"
@@ -99,7 +112,6 @@ function App() {
         className="w-full h-full absolute left-0 top-0 object-cover -z-10"
         src="https://firebasestorage.googleapis.com/v0/b/nour-el-djazair.appspot.com/o/6015593_Chef_Man_1920x1080.mp4?alt=media&token=61005777-da89-4b1f-9467-a4749c620732"
       ></video>
-
       <div className="w-full h-full absolute left-0 top-0 bg-gray-800/90 mix-blend-multiply -z-10"></div>
       {/* NavBar */}
       <div className="fixed flex justify-between items-start w-[98dvw] text-white p-5 z-50 bg-gradient-to-b from-black to-transparent">
@@ -112,7 +124,7 @@ function App() {
                 setSelectedNav(index + 1);
                 scrollToSection(index);
               }}
-              className={`opacity-60 hover:text-slate-200 hover:opacity-100 text-left animate relative  ${
+              className={`opacity-60 hover:text-blue-gray-200 hover:opacity-100 text-left animate relative  ${
                 selectedNav === index + 1 ? "!opacity-100" : ""
               }`}
             >
@@ -121,7 +133,7 @@ function App() {
           ))}
 
           <motion.div
-            className="absolute w-10  -bottom-1 h-[3px] rounded-full bg-gradient-to-tr from-slate-500 to-slate-100"
+            className="absolute w-10  -bottom-1 h-[3px] rounded-full bg-gradient-to-tr from-blue-gray-500 to-blue-gray-100"
             initial={false}
             animate={{
               left: `${(selectedNav - 1) * (126 / navItems.length)}%`,
@@ -129,12 +141,21 @@ function App() {
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
           />
         </div>{" "}
-        <button
-          // onClick={() => setSelectedNav(index + 1)}
-          className={`animate mr-5 mt-1 !opacity-100 text-black font-medium hover:shadow-white/30 hover:shadow-lg bg-gradient-to-tr from-slate-500 to-slate-100`}
-        >
-          Contact
-        </button>
+        <div className=" flex items-center justify-center !gap-8">
+          {orders === 0 ? (
+            ""
+          ) : (
+            <Badge size="small" count={orders} className="cursor-pointer mt-2 ">
+              <PiShoppingCart className="!text-2xl text-white" />
+            </Badge>
+          )}
+          <button
+            // onClick={() => setSelectedNav(index + 1)}
+            className={`animate mr-5 mt-1 !opacity-100 text-black font-medium hover:shadow-white/30 hover:shadow-lg bg-gradient-to-tr from-blue-gray-500 to-blue-gray-100`}
+          >
+            Contact
+          </button>
+        </div>
       </div>
       {/* Hero section */}
       <div className="section" ref={homeRef}>
@@ -175,7 +196,7 @@ function App() {
             transition={{ duration: 0.5, ease: "easeInOut" }} // Transition for text
           >
             Where Every Meal <br /> Tells a
-            <span className="text-slate-400"> Story</span>
+            <span className="text-blue-gray-400"> Story</span>
           </motion.p>
           <motion.p
             className="w-[37vw] font-light opacity-80 text-center"
@@ -202,7 +223,7 @@ function App() {
                 scrollToSection(2);
                 setSelectedNav(3);
               }}
-              className="bg-gradient-to-tr from-slate-500 font-semibold !px4 to-slate-100 text-black animate"
+              className="bg-gradient-to-tr from-blue-gray-500 font-semibold !px4 to-blue-gray-100 text-black animate"
             >
               Discover Our Masterpieces
             </button>
@@ -211,7 +232,7 @@ function App() {
                 scrollToSection(3);
                 setSelectedNav(2);
               }}
-              className="flex bg-transparent hover:bg-slate-300/10 animate items-center gap-2"
+              className="flex bg-transparent hover:bg-blue-gray-300/10 animate items-center gap-2"
             >
               <IoPlayForwardOutline className="text-lg" />
               Watch our story
@@ -299,9 +320,9 @@ function App() {
                 setSelectedType(index);
                 filterType(index - 1);
               }}
-              className={`flex items-center gap-1 text-zinc-500 hover:font-semibold hover:text-zinc-400/70 hover:border-b-zinc-400/70 pb-[0.05rem] border-b-2 border-transparent animate ${
+              className={`flex items-center gap-1 text-gray-500 hover:font-semibold hover:text-gray-400 hover:border-b-gray-400/70 pb-[0.05rem] border-b-2 border-transparent animate ${
                 index === SelectedType &&
-                " font-semibold text-zinc-400 border-b-zinc-400 "
+                " font-MontserratMedium !text-gray-300 border-b-gray-300 "
               }`}
             >
               {type.icon}
@@ -311,32 +332,20 @@ function App() {
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 pt-4 cursor-pointer">
           {foods.map((item, index) => (
-            // <div
-            //   key={index}
-            //   className="border shadow-lg rounded-lg hover:scale-105 duration-300"
-            // >
-            //   <img
-            //     src={item.image}
-            //     alt={item.name}
-            //     className="w-full h-[200px] object-cover rounded-t-lg"
-            //   />
-            //   <div className="flex justify-between px-2 py-4">
-            //     <p className="font-bold">{item.name}</p>
-            //     <p>
-            //       <span className="bg-orange-500 text-white px-2 py-1 rounded-full">
-            //         {item.price}
-            //       </span>
-            //     </p>
-            //   </div>
-            // </div>
             <motion.div
+              onClick={() => {
+                setSelectedDish(index);
+                setOpenDish(true);
+              }}
               key={index}
-              whileHover={{ scale: 1.02 }}
-              className="my-12 bg-slate-400/5  w-[285px]  p-4 hover:drop-shadow-lg  shadow-md rounded-lg h-[165px] backdrop-blur-md duration-75 ease-in-out flex flex-col justify-between items-center"
+              whileHover={{ scale: 1.015 }}
+              transition={{ ease: "easeInOut" }}
+              className="my-12 bg-blue-gray-400/5  w-[285px]  p-4 hover:drop-shadow-lg  shadow-md rounded-lg h-[165px] backdrop-blur-md duration-75 ease-in-out flex flex-col justify-between items-center"
             >
               <div className="w-full relative flex justify-end items-center ">
                 <motion.div
-                  whileHover={{ scale: 1.2 }}
+                  whileHover={{ scale: 1.1 }}
+                  transition={{ ease: "easeInOut" }}
                   className="w-32 h-32 absolute -mt-8 drop-shadow-xl"
                 >
                   <img
@@ -359,16 +368,23 @@ function App() {
                 <div className="flex w-full items-center justify-between">
                   <p className="text-headingColor text-lg font-semibold">
                     {item.price}{" "}
-                    <span className="text-sm font-semibold text-slate-500">
+                    <span className="text-sm font-semibold text-blue-gray-500">
                       DZD
                     </span>
                   </p>{" "}
                   <motion.div
                     whileTap={{ scale: 0.75 }}
-                    // onClick={() => {
-                    //   setItems([...cartItems, item]);
-                    // }}
-                    className="bg-slate-600 rounded-full ml-auto w-8 h-8 cursor-pointer hover:drop-shadow-md flex items-center justify-center"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      info(`Your ${item.name} is on the way !`);
+                      setTimeout(() => {
+                        audioRef.current.play();
+                      }, 100);
+
+                      setOrders(orders + 1);
+                    }}
+                    className="bg-blue-gray-600 rounded-full ml-auto w-8 h-8 cursor-pointer hover:drop-shadow-md flex items-center justify-center"
                   >
                     <MdShoppingBasket className="text-white" />
                   </motion.div>{" "}
@@ -421,6 +437,94 @@ function App() {
             />
           </div>
         </div>
+        {foods.length > 0 &&
+          (selectedDish || selectedDish === 0) &&
+          !isNaN(selectedDish) && (
+            <Dialog
+              size="lg"
+              onClick={() => setOpenDish(false)}
+              className="!bg-transparent !outline-none"
+              open={openDish}
+              handler={() => setOpenDish(!openDish)}
+            >
+              <DialogBody className="pl-16 gap-10 !shadow-none text-white font-Montserrat flex items-center justify-center">
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                  }}
+                  className="w-1/2 flex flex-col items-start justify-center"
+                >
+                  <p className="text-4xl font-semibold  mb-6 flex flex-col items-start">
+                    {foods[selectedDish].name}
+                    <div className="w-[75%] mt-0.5 ml-0.5 h-[4px] rounded-full bg-gradient-to-tr from-blue-gray-500 to-blue-gray-100" />
+                  </p>
+                  <p className="text-lg font-MontserratMedium">ingrediants :</p>
+                  <p className="text-gray-500 mb-4">
+                    {foods[selectedDish].desc}
+                  </p>
+                  <p className="text-lg w-full flex gap-3  font-MontserratMedium">
+                    Weight :
+                    <p className="text-gray-500 mb-4 font-Montserrat">200g</p>
+                  </p>
+                  <p className="text-lg w-full flex gap-3  font-MontserratMedium">
+                    Price :
+                    <p className="text-lg font-semibold mb-4  font-Montserrat">
+                      {foods[selectedDish].price}{" "}
+                      <span className="text-sm font-semibold text-blue-gray-500">
+                        DZD
+                      </span>
+                    </p>
+                  </p>
+                  <button
+                    onClick={() => {
+                      info(`Your ${foods[selectedDish].name} is on the way !`);
+                      setOpenDish(false);
+                      setTimeout(() => {
+                        audioRef.current.play();
+                      }, 500);
+                      setOrders(orders + 1);
+                    }}
+                    className={`animate mr-5 mt-1 !opacity-100  text-black font-semibold hover:shadow-white/30 hover:shadow-lg bg-gradient-to-tr from-blue-gray-500 to-blue-gray-100`}
+                  >
+                    Let’s Get Cooking – Order Now
+                  </button>
+                </div>
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                  }}
+                  className="w-1/2"
+                >
+                  <motion.img
+                    className="size-72 object-contain"
+                    src={foods[selectedDish].image}
+                    alt=""
+                    animate={
+                      !foods[selectedDish].rotate
+                        ? {
+                            y: [0, -10, 0], // Floating effect
+                            transition: {
+                              repeat: Infinity,
+                              duration: 3,
+                              ease: "easeInOut",
+                            },
+                          }
+                        : {
+                            rotate: 360, // Rotating effect
+                            transition: {
+                              repeat: Infinity,
+                              duration: 25,
+                              ease: "linear",
+                            },
+                          }
+                    }
+                  />
+                </div>
+              </DialogBody>
+            </Dialog>
+          )}
       </div>
     </div>
   );

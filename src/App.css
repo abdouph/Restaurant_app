@@ -34,7 +34,13 @@
   font-family: "UniHeavy";
   src: url("./fonts/Fontfabric\ -\ UniNeueHeavy.otf") format("opentype");
 }
+.ant-message-notice-content {
+  @apply !bg-gradient-to-tr from-[#161616] to-gray-800 !text-white;
+}
 
+.ant-badge-count {
+  @apply !ring-0;
+}
 html {
   scroll-behavior: smooth;
 }
