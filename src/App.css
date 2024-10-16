@@ -1,6 +1,26 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+body {
+  background-image: url("https://firebasestorage.googleapis.com/v0/b/nour-el-djazair.appspot.com/o/Artboard%201.png?alt=media&token=bd65373f-af82-4769-ae41-5b2078f117ab");
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: inherit;
+  background-size: cover;
+  background-position: center;
+  filter: blur(2px);
+  z-index: -100 !important;
+}
 
 @font-face {
   font-family: "Montserrat";
@@ -37,7 +57,12 @@
 .ant-message-notice-content {
   @apply !bg-gradient-to-tr from-[#161616] to-gray-800 !text-white;
 }
-
+.vjs-big-play-button {
+  @apply !hidden;
+}
+.vjs-control-bar {
+  @apply !bg-transparent !my-2;
+}
 .ant-badge-count {
   @apply !ring-0;
 }
