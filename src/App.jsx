@@ -1,13 +1,14 @@
 import { Dialog, DialogBody } from "@material-tailwind/react";
 import { motion } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
-import { BiDrink, BiSolidDish } from "react-icons/bi";
+import { BiDrink, BiFoodMenu, BiSolidDish } from "react-icons/bi";
 import { IoPizzaOutline, IoPlayForwardOutline } from "react-icons/io5";
 import { LuIceCream2, LuSalad } from "react-icons/lu";
 import {
   MdEmail,
   MdFoodBank,
   MdLocationPin,
+  MdOutlineMenu,
   MdOutlinePlayCircleOutline,
   MdPhone,
   MdShoppingBasket,
@@ -31,7 +32,7 @@ import { GoPlay } from "react-icons/go";
 import { Player } from "./Player.jsx";
 import { BsFillSendFill } from "react-icons/bs";
 import { AiFillInstagram } from "react-icons/ai";
-import { FaFacebook, FaXTwitter } from "react-icons/fa6";
+import { FaChevronDown, FaFacebook, FaXTwitter } from "react-icons/fa6";
 function App() {
   const [selectedNav, setSelectedNav] = useState(1);
   const navItems = ["Home", "About", "Menu"];
@@ -44,8 +45,12 @@ function App() {
 
   const scrollToSection = (index) => {
     const sectionRefs = [homeRef, aboutRef, menuRef, historyRef];
-    sectionRefs[index].current.scrollIntoView({ behavior: "smooth" });
+    if (sectionRefs[index] && sectionRefs[index].current) {
+      if (charLimit === 23) sectionRefs[index].current.scrollIntoView();
+      else sectionRefs[index].current.scrollIntoView({ behavior: "smooth" });
+    }
   };
+
   const [foods, setFoods] = useState(data);
   const [SelectedType, setSelectedType] = useState(0);
   const filterType = (type) => {
@@ -78,6 +83,30 @@ function App() {
     { id: 6, name: "Drinks", icon: <BiDrink className="text-lg" /> },
   ];
   const paragraphRefs = useRef([]);
+  const [charLimit, setCharLimit] = useState(23);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        // Tailwind's md breakpoint is 768px
+        setCharLimit(23);
+      } else {
+        setCharLimit(12);
+      }
+    };
+
+    // Initial check
+    handleResize();
+
+    // Add event listener for window resize
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup event listener on component unmount
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   useEffect(() => {
     paragraphRefs.current.forEach((paragraph) => {
       if (paragraph) {
@@ -88,7 +117,7 @@ function App() {
 
         for (let i = 0; i < words.length; i++) {
           const testLine = firstLine + words[i] + " ";
-          if (charCount + words[i].length + 1 > 12) {
+          if (charCount + words[i].length + 1 > charLimit) {
             restOfParagraph = words.slice(i).join(" ");
             break;
           }
@@ -99,7 +128,7 @@ function App() {
         paragraph.innerHTML = `${firstLine.trim()}<br/> ${restOfParagraph}`;
       }
     });
-  }, [, foods]);
+  }, [, charLimit, foods]);
   useEffect(() => {
     filterType(-1);
   }, []);
@@ -143,6 +172,8 @@ function App() {
       videojs.log("player will dispose");
     });
   };
+  const [expandMenu, setExpandMenu] = useState(false);
+  const [expandNav, setExpandNav] = useState(false);
   return (
     <div className="w-[100dvw] overflow-y-auto relative h-[100dvh] overflow-hidden flex flex-col items-center justify-start">
       {contextHolder} <audio ref={audioRef} src={bell} preload="auto" />
@@ -160,9 +191,13 @@ function App() {
       ></video>
       <div className="w-full h-full absolute left-0 top-0 bg-gray-800/90 mix-blend-multiply -z-10"></div>
       {/* NavBar */}
-      <div className="fixed flex justify-between items-start w-[98dvw] text-white p-5 z-50 bg-gradient-to-b from-black to-transparent">
-        <img src={logo} className="w-16 h-16 ml-5 object-contain" alt="" />{" "}
-        <div className="ml-16  mt-2 px-10 py-2 backdrop-blur-xl rounded-full border-[2px] bg-blue-gray-500/15 border-blue-gray-500">
+      <div className="fixed flex justify-between items-start w-[98dvw] text-white p-5 md:pr-5 pr-3 z-50 bg-gradient-to-b from-black to-transparent">
+        <img
+          src={logo}
+          className="md:size-16 size-14 md:ml-5 object-contain"
+          alt=""
+        />{" "}
+        <div className="ml-16 hidden md:flex mt-2 px-10 py-2 backdrop-blur-xl rounded-full border-[2px] bg-blue-gray-500/15 border-blue-gray-500">
           <div className=" relative flex items-center justify-center gap-16 text-[0.82rem] ">
             {navItems.map((item, index) => (
               <p
@@ -189,7 +224,7 @@ function App() {
             /> */}
           </div>
         </div>{" "}
-        <div className=" flex items-center justify-center !gap-8">
+        <div className="flex items-center justify-center !gap-8">
           {orders === 0 ? (
             ""
           ) : (
@@ -198,17 +233,47 @@ function App() {
             </Badge>
           )}
           <button
-            // onClick={() => setSelectedNav(index + 1)}
-            className={`animate mr-5 mt-1 !opacity-100 text-black font-medium hover:shadow-white/30 hover:shadow-lg bg-gradient-to-tr from-blue-gray-500 to-blue-gray-100`}
+            className={`animate hidden md:block md:mr-5 mt-1 !opacity-100 text-black font-medium hover:shadow-white/30 hover:shadow-lg bg-gradient-to-tr from-blue-gray-500 to-blue-gray-100`}
           >
             Contact
           </button>
+          <button
+            onClick={() => setExpandNav(true)}
+            className={`md:hidden !px-1.5 mt-1 text-[2rem] !opacity-100 text-white`}
+          >
+            <MdOutlineMenu />
+          </button>
+          <Dialog
+            size="lg"
+            className="md:hidden !bg-transparent !outline-none"
+            open={expandNav}
+          >
+            <DialogBody className="pl-5 !shadow-none text-white font-MontserratMedium">
+              <div className=" relative flex flex-col items-center justify-center gap-10 text-2xl ">
+                {navItems.map((item, index) => (
+                  <p
+                    key={index}
+                    onClick={() => {
+                      setSelectedNav(index + 1);
+                      scrollToSection(index);
+                      setExpandNav(false);
+                    }}
+                    className={`opacity-60 hover:text-blue-gray-200 hover:opacity-100 text-left animate relative  ${
+                      selectedNav === index + 1 ? "!opacity-100" : ""
+                    }`}
+                  >
+                    {item}
+                  </p>
+                ))}
+              </div>
+            </DialogBody>
+          </Dialog>
         </div>
       </div>
       {/* Hero section */}
       <div className="section" ref={homeRef}>
         <motion.div
-          className="h-full w-full text-gray-200 max-h-[500px] items-center flex flex-col justify-end gap-5 rounded-xl"
+          className="h-full w-full text-gray-200 items-center flex md:pb-10 flex-col md:justify-end justify-center md:gap-5 gap-7 rounded-xl"
           initial="hidden"
           animate="visible"
           variants={{
@@ -228,7 +293,7 @@ function App() {
           <motion.img
             src={logo}
             alt=""
-            className="w-[10dvw] object-contain mb-3"
+            className="w-[10dvw] hidden md:flex object-contain mb-3"
             variants={{
               hidden: { opacity: 0, y: 35 },
               visible: { opacity: 1, y: 0 },
@@ -236,7 +301,7 @@ function App() {
             transition={{ duration: 0.5, ease: "easeInOut" }} // Transition for img
           />
           <motion.p
-            className="text-center text-5xl font-medium leading-[3.7rem]"
+            className="text-center md:text-5xl text-4xl font-MontserratMedium leading-[3.7rem]"
             variants={{
               hidden: { opacity: 0, y: 35 },
               visible: { opacity: 1, y: 0 },
@@ -247,7 +312,7 @@ function App() {
             <span className="text-blue-gray-400"> Story</span>
           </motion.p>
           <motion.p
-            className="w-[37vw] font-light opacity-80 text-center"
+            className="md:w-[37dvw] w-[80%] leading-[1.79rem] md:leading-normal font-light opacity-80 text-center"
             variants={{
               hidden: { opacity: 0, y: 35 },
               visible: { opacity: 1, y: 0 },
@@ -264,23 +329,23 @@ function App() {
               visible: { opacity: 1, y: 0 },
             }}
             transition={{ duration: 0.5, ease: "easeInOut" }} // Transition for buttons
-            className="flex items-center justify-center gap-2"
+            className="flex-col md:flex items-center justify-center  md:gap-2"
           >
             <button
               onClick={() => {
                 scrollToSection(2);
                 setSelectedNav(3);
               }}
-              className="bg-gradient-to-tr from-blue-gray-500 font-semibold !px4 to-blue-gray-100 text-black animate"
+              className="bg-gradient-to-tr md:w-auto w-[75dvw] from-blue-gray-500 py-2.5 font-semibold !px4 to-blue-gray-100 text-black animate"
             >
-              Discover Our Masterpieces
+              Discoverrr Our Masterpieces
             </button>
             <button
               onClick={() => {
                 scrollToSection(3);
                 setSelectedNav(2);
               }}
-              className="flex  hover:bg-blue-gray-300/30 bg-blue-gray-300/10 animate items-center gap-2"
+              className="flex justify-center hover:bg-blue-gray-300/30 md:mt-0 mt-3 md:py-2 py-3 md:bg-blue-gray-300/10 bg-blue-gray-300/20  backdrop-blur-xl animate items-center gap-2 w-full"
             >
               <IoPlayForwardOutline className="text-lg" />
               Watch our story
@@ -291,7 +356,7 @@ function App() {
         <div className="absolute w-full h-[20dvh] bg-gradident-to-t from-transparent via-black to-transparent -bottom-[10dvh]"></div>
       </div>
       {/* About sections */}
-      <div ref={aboutRef} className=" w-full !pt-[11.5dvh] pb-32 relative">
+      <div ref={aboutRef} className=" !w-screen  !pt-[11.5dvh] pb-32 relative">
         {/* <img
           src={
             "https://firebasestorage.googleapis.com/v0/b/nour-el-djazair.appspot.com/o/Artboard%201.png?alt=media&token=bd65373f-af82-4769-ae41-5b2078f117ab"
@@ -301,9 +366,9 @@ function App() {
           className="-z-10 w-full h-screen bg-cover object-cover absolute top-0 left-0"
           alt=""
         />{" "} */}
-        <div className="w-full h-full absolute left-0 top-0 bg-gray-700 mix-blend-multiply -z-10"></div>
-        <div className="flex items-start justify-center p-10 pt-5 gap-20 px-36 h-[90dvh] pb-10 !z[1000]">
-          <div className="flex w-2/6 flex-col h-full items-center justify-center gap-7">
+        <div className="w-full  h-full absolute left-0 top-0 bg-gray-700 mix-blend-multiply -z-10"></div>
+        <div className="flex w-full  items-start justify-center p-4 md:p-10 pt-5 gap-20 md:px-36 h-[90dvh] pb-10 !z[1000]">
+          <div className="hidden md:flex md:w-2/6 w-0 flex-col h-full items-center justify-center gap-7">
             <p className="h-10 text-3xl ">Abous us</p>
             <video
               src={v}
@@ -312,22 +377,26 @@ function App() {
               className="rounded-3xl h-[70dvh] object-cover w-full flex-grow"
             />
           </div>
-          <div className="flex w-4/6 flex-col h-full items-end justify-start gap-14">
+          <div className="flex w-full md:w-4/6 flex-col h-full items-center md:text-end justify-start gap-10 md:gap-14">
+            <p className="h-10 text-4xl w-full text-center md:hidden opacity-90">
+              Abous us
+            </p>
+
             <img
               src="https://img.freepik.com/free-photo/grilled-beef-fillet-with-vegetable-appetizer-plate-generated-by-ai_188544-24766.jpg?t=st=1728669741~exp=1728673341~hmac=a5173a79ad7a40bedbd310acce476ac05082aa142a3ea2386793477974586758&w=826"
               alt=""
-              className="rounded-xl object-cover w-7/12 h-[27dvh]"
+              className="rounded-xl object-cover md:w-7/12 md:h-[27dvh] w-10/12 h-[20dvh]"
             />
-            <p className="h-10 uppercase text-xl  mr-auto mt-auto">
+            <p className="h-10 uppercase text-xl mt-7 mr-auto md:mt-auto">
               The rich history <br /> of our restaurant
             </p>
-            <div className="flex items-start justify-center gap-14 opacity-70 text-xs font-MontserratLight leading-5">
-              <p className="w-1/2">
+            <div className="flex-col md:flex items-start justify-center gap-14 opacity-70 text-xs font-MontserratLight leading-5">
+              <p className="md:w-1/2 leading-loose">
                 Nestled in the heart of Casbah, a city steeped in rich history
                 and cultural legacy, Noor El Djazair stands as a tribute to
                 centuries of Mediterranean charm and Algerian warmth.
               </p>
-              <p className="w-1/2">
+              <p className="md:w-1/2 leading-loose md:mt-0 mt-5">
                 Founded in 1995, Noor El Djazair has since become a premier
                 destination for culinary enthusiasts, blending traditional
                 Algerian cuisine with modern elegance to create an unforgettable
@@ -338,22 +407,26 @@ function App() {
         </div>
         <p
           ref={historyRef}
-          className="text-3xl mt-7 pt-28 w-full text-center mb-7 opacity-75"
+          className="text-2xl md:text-3xl mt-7 pt-28 leading-relaxed w-full text-center mb-7 opacity-75"
         >
-          From Dream to Reality – Watch Our Story
+          From Dream to Reality <span className="hidden md:block">–</span>
+          <span className="md:hidden">
+            <br />
+          </span>{" "}
+          Watch Our Story
         </p>{" "}
-        <div className=" w-4/6 mx-auto rounded-3xl overflow-hidden relative">
+        <div className=" md:w-4/6 w-11/12 mx-auto rounded-3xl overflow-hidden relative">
           <Player />
         </div>
       </div>
       {/* Menu section */}
       <div
         ref={menuRef}
-        className="flex relative w-full flex-col items-start gap-4 pt-28 p-10"
+        className="flex relative w-full flex-col items-start gap-4 pt-28 p-3"
       >
-        <p className="h-10 text-2xl ">Menu</p>
+        <p className="h-10 text-3xl font-MontserratMedium md:text-2xl ">Menu</p>
         <div className="w-full h-full absolute left-0 top-0 bg-gray-700 mix-blend-multiply -z-10"></div>
-        <div className="flex items-center justify-start gap-10">
+        <div className="md:flex hidden items-center md:justify-start justify-between gap-7 md:gap-10">
           {types.map((type, index) => (
             <div
               key={index}
@@ -361,7 +434,7 @@ function App() {
                 setSelectedType(index);
                 filterType(index - 1);
               }}
-              className={`flex items-center gap-1 text-gray-500 hover:font-semibold hover:text-gray-400 hover:border-b-gray-400/70 pb-[0.05rem] border-b-2 border-transparent animate ${
+              className={` flex items-center gap-1 text-gray-500 hover:font-semibold hover:text-gray-400 hover:border-b-gray-400/70 pb-[0.05rem] border-b-2 border-transparent animate ${
                 index === SelectedType &&
                 " font-MontserratMedium !text-gray-300 border-b-gray-300 "
               }`}
@@ -371,7 +444,44 @@ function App() {
             </div>
           ))}
         </div>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 pt-4 cursor-pointer">
+        <div className="flex w-full items-center justify-between md:hidden">
+          <div
+            onClick={() => {
+              setSelectedType(0);
+              filterType(-1);
+              setExpandMenu(!expandMenu);
+            }}
+            className={`flex items-center gap-1 hover:font-semibold hover:text-gray-400 hover:border-b-gray-400/70 pb-[0.05rem] border-b-2 border-transparent animate font-MontserratMedium !text-gray-300 border-b-gray-300`}
+          >
+            {types[SelectedType].icon}
+            {types[SelectedType].name} <FaChevronDown />
+          </div>
+        </div>
+        {expandMenu && (
+          <div className="md:hidden grid grid-cols-2 md:w-auto w-full items-center md:justify-start justify-between gap-7 md:gap-10">
+            {types.map(
+              (type, index) =>
+                index !== 0 && (
+                  <div
+                    key={index}
+                    onClick={() => {
+                      setSelectedType(index);
+                      filterType(index - 1);
+                      setExpandMenu(false);
+                    }}
+                    className={` flex items-center gap-1 text-gray-500 hover:font-semibold hover:text-gray-400 hover:border-b-gray-400/70 pb-[0.05rem] border-b-2 border-transparent animate ${
+                      index === SelectedType &&
+                      " font-MontserratMedium !text-gray-300 border-b-gray-300 "
+                    }`}
+                  >
+                    {type.icon}
+                    {type.name}
+                  </div>
+                )
+            )}
+          </div>
+        )}
+        <div className="grid md:grid-cols-2 items-center justify-center lg:grid-cols-4 gap-6 pt-4 cursor-pointer">
           {foods.map((item, index) => (
             <motion.div
               onClick={() => {
@@ -381,7 +491,7 @@ function App() {
               key={index}
               whileHover={{ scale: 1.015 }}
               transition={{ ease: "easeInOut" }}
-              className="my-12 bg-blue-gray-400/5  w-[285px]  p-4 hover:drop-shadow-lg  shadow-md rounded-lg h-[165px] backdrop-blur-md duration-75 ease-in-out flex flex-col justify-between items-center"
+              className="md:my-12 my-10 bg-blue-gray-400/5  w-full md:w-[285px]  p-4 hover:drop-shadow-lg  shadow-md rounded-lg h-[165px] backdrop-blur-md duration-75 ease-in-out flex flex-col justify-between items-center"
             >
               <div className="w-full relative flex justify-end items-center ">
                 <motion.div
@@ -400,7 +510,7 @@ function App() {
                 <div className="flex flex-col items-start justify-center w-full ">
                   <p
                     ref={(el) => (paragraphRefs.current[index] = el)}
-                    className="text-lg font-semibold h-14"
+                    className="text-xl md:text-lg font-semibold h-14"
                   >
                     {item.name}
                   </p>
@@ -444,15 +554,47 @@ function App() {
               open={openDish}
               handler={() => setOpenDish(!openDish)}
             >
-              <DialogBody className="pl-16 gap-10 !shadow-none text-white font-Montserrat flex items-center justify-center">
+              <DialogBody className="md:pl-16 pl-5 gap-10 !shadow-none text-white font-Montserrat flex items-center justify-center">
                 <div
                   onClick={(e) => {
                     e.stopPropagation();
                     e.preventDefault();
                   }}
-                  className="w-1/2 flex flex-col items-start justify-center"
+                  className="w-full md:w-1/2 flex md:gap-0 gap-2 flex-col items-start justify-center"
                 >
-                  <p className="text-4xl font-semibold  mb-6 flex flex-col items-start">
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                    }}
+                    className="md:hidden my-5 w-full"
+                  >
+                    <motion.img
+                      className="size-52 mx-auto object-contain"
+                      src={foods[selectedDish].image}
+                      alt=""
+                      animate={
+                        !foods[selectedDish].rotate
+                          ? {
+                              y: [0, -10, 0], // Floating effect
+                              transition: {
+                                repeat: Infinity,
+                                duration: 3,
+                                ease: "easeInOut",
+                              },
+                            }
+                          : {
+                              rotate: 360, // Rotating effect
+                              transition: {
+                                repeat: Infinity,
+                                duration: 25,
+                                ease: "linear",
+                              },
+                            }
+                      }
+                    />
+                  </div>{" "}
+                  <p className="text-4xl font-semibold md:mt-0 mt-4 mb-6 flex flex-col items-start">
                     {foods[selectedDish].name}
                     <div className="w-[75%] mt-0.5 ml-0.5 h-[4px] rounded-full bg-gradient-to-tr from-blue-gray-500 to-blue-gray-100" />
                   </p>
@@ -482,7 +624,7 @@ function App() {
                       }, 500);
                       setOrders(orders + 1);
                     }}
-                    className={`animate mr-5 mt-1 !opacity-100  text-black font-semibold hover:shadow-white/30 hover:shadow-lg bg-gradient-to-tr from-blue-gray-500 to-blue-gray-100`}
+                    className={`animate mr-5 mt-1 !opacity-100  text-black font-semibold hover:shadow-white/30 hover:shadow-lg bg-gradient-to-tr md:w-auto w-full md:h-auto h-10 from-blue-gray-500 to-blue-gray-100`}
                   >
                     Let’s Get Cooking – Order Now
                   </button>
@@ -492,7 +634,7 @@ function App() {
                     e.stopPropagation();
                     e.preventDefault();
                   }}
-                  className="w-1/2"
+                  className="w-1/2 hidden md:block"
                 >
                   <motion.img
                     className="size-72 object-contain"
@@ -522,19 +664,19 @@ function App() {
               </DialogBody>
             </Dialog>
           )}
-        <div className="flex rounded-xl overflow-hidden mx-auto mt-20 items-center justify-between h-14 w-1/2 text-white bg-[#1d1e20] !mb-10">
+        <div className="flex rounded-xl overflow-hidden mx-auto mt-20 items-center justify-between h-14 w-full md:w-1/2 text-white bg-[#1d1e20] !mb-10">
           <input
             placeholder="You want to subscribe ? enter your email"
-            className="px-5 text-base !outline-none placeholder:opacity-70 opacity-60 flex-grow bg-transparent h-full"
+            className="md:px-5 px-3 md:text-base text-sm !outline-none placeholder:opacity-70 opacity-60 flex-grow bg-transparent h-full"
           />
 
-          <div className="w-[5rem] bg-gradient-to-tr hover:to-blue-500 transition-all ease-in-out animate from-blue-900 to-blue-700 h-full flex items-center justify-center text-2xl">
+          <div className="w-[4rem] rounded-lg md:w-[4.5rem] bg-gradient-to-tr hover:to-blue-500 transition-all ease-in-out animate from-blue-900 to-blue-700 h-full flex items-center justify-center text-2xl">
             <BsFillSendFill />
           </div>
         </div>
       </div>{" "}
-      {/* Menu section */}
-      <footer className="flex flex-col items-start justify-center w-full bg-[#08080a]/70 backdrop-blur-lg p-10 !pb-7">
+      {/* Footer section */}
+      <footer className="hidden md:flex flex-col items-start justify-center w-full bg-[#08080a]/70 backdrop-blur-lg p-10 pb-7">
         <div className="flex items-center justify-between w-full">
           <img src={logo} alt="" className="size-24 ml-7" />
 
@@ -593,6 +735,47 @@ function App() {
             </div>
           </div>
         </div>
+        <p className="w-full mt-10 text-xs text-center text-white/40">
+          © Copyrights 2024 by Nour Al Djazair, All rights reserved
+        </p>
+      </footer>
+      <footer className=" md:hidden flex-col items-start justify-center w-full bg-[#08080a]/70 backdrop-blur-lg  pt-8 pb-4 md:!pb-7">
+        <div className="flex items-center justify-between gap-10 w-full">
+          <img src={logo} alt="" className="size-24 ml-7" />
+          <div className="flex flex-col text-xs  flex-grow items-start gap-1 text-left text-white/50">
+            <p className=" text-base font-medium text-white">
+              Entrer en contact
+            </p>
+            <p className="hover:text-white/75 animate">
+              Question ou feedback ?
+            </p>
+            <p>Nous aimerions recevoir de vous</p>
+            <div className="flex items-center justify-start gap-5 mt-2 text-lg text-white ">
+              <a
+                href={"https://www.facebook.com"}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FaFacebook className="hover:text-white/75 animate" />
+              </a>
+              <a
+                href={"https://www.facebook.com"}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FaXTwitter className="hover:text-white/75 animate" />
+              </a>
+              <a
+                href={"https://www.facebook.com"}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <AiFillInstagram className="hover:text-white/75 animate" />
+              </a>
+            </div>
+          </div>
+        </div>
+
         <p className="w-full mt-10 text-xs text-center text-white/40">
           © Copyrights 2024 by Nour Al Djazair, All rights reserved
         </p>
